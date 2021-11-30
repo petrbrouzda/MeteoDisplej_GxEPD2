@@ -1,3 +1,7 @@
+/**
+ * Lidsky citelna predpoved z https://alojz.cz/praha
+ */ 
+
 #ifndef P_ALOJZ_H
 #define P_ALOJZ_H
 
@@ -16,7 +20,7 @@ class PredpovedAlojz
         PredpovedAlojz( raLogger * logger, raConfig * config , DataAplikace * dataAplikace);
         void loadData();
         boolean hasData();
-        void drawData( ExtDisplay * extdisplay, boolean firstRun );
+        void drawData( ExtDisplay * extdisplay, bool firstRun );
 
     private:
         raLogger * logger;

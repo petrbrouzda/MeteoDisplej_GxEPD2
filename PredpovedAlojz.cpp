@@ -1,3 +1,7 @@
+/**
+ * Lidsky citelna predpoved z https://alojz.cz/praha
+ */ 
+
 #include <Arduino.h>
 
 #include "PredpovedAlojz.h"
@@ -70,7 +74,7 @@ boolean PredpovedAlojz::hasData()
 
 #define BUFFER_SIZE 100
 
-void PredpovedAlojz::drawData( ExtDisplay * extdisplay, boolean firstRun )
+void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
 {
     char buffer[BUFFER_SIZE];
     const char * nadpis;

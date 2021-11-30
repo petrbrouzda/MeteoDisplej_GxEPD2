@@ -84,7 +84,6 @@ boolean getNextWord() {
  * 
  * Tisk je omezeny nastavenym bounding boxem.
  * 
- * 
  * Vraci aktualni pozici X.
  * necha posX = puvodni posX; nastavi posY = posledni radek s textem
  */ 

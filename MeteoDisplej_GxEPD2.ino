@@ -80,11 +80,14 @@ Konfiguracni promenne:
 #include "ExtDisplay.h"
 #include "DataAplikace.h"
 #include "PredpovedAlojz.h"
+#include "InfoSlunce.h"
 
 
 
 DataAplikace * dataAplikace;
 PredpovedAlojz * predpovedAlojz;
+InfoSlunce * infoSlunce;
+
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
 
@@ -163,6 +166,7 @@ void setup() {
 
   // konfigurace jednotlivych modulu
   predpovedAlojz = new PredpovedAlojz( logger, &config, dataAplikace );
+  infoSlunce = new InfoSlunce( logger, dataAplikace );
 
   startWifi();
   //------ user code here -----
@@ -178,10 +182,12 @@ void loop() {
   //------ user code here ------
 }
 
-
+/**
+ * Zajistuje vlastni vykresleni vseho na displej
+ */ 
 void doDraw()
 {
-  boolean firstRun = true;
+  bool firstRun = true;
 
   // most e-papers have width < height (portrait) as native orientation, especially the small ones
   // in GxEPD2 rotation 0 is used for native orientation (most TFT libraries use 0 fix for portrait orientation)
@@ -197,13 +203,22 @@ void doDraw()
   display->firstPage();
   do
   {
+    extdisplay.setPos( 5, 25 );
+
     if( predpovedAlojz->hasData() ) {
       extdisplay.setPos( 5, 25 );
       extdisplay.setBbRightMargin( 5 );
       predpovedAlojz->drawData( &extdisplay, firstRun );
+      // posY je nastavena na posledni radek textu z Aloise, tak ji posuneme na dalsi
+      extdisplay.posY += extdisplay.vyskaRadku;
+
     } else {
       logger->log( "Alojz nema data" );
     }
+
+    // posX/Y uz mame nastavenu
+    extdisplay.posY += 5;
+    infoSlunce->drawData( &extdisplay, firstRun );
 
     firstRun = false;
   }
@@ -221,13 +236,14 @@ void doDraw()
 
 /**
  * stahne a spocte vsechna data 
- * a vykresli je na displej
+ * a pak zavola funkci doDraw() na jejich vykresleni
  */ 
 void delej()
 {
   // nejprve stahneme vsechna data a vse si spocteme
 
   predpovedAlojz->loadData();
+  infoSlunce->compute();
 
 
   // a pak vse najednou vykreslime
