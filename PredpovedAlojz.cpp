@@ -128,7 +128,7 @@ void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
           extdisplay->display->setTextColor( BARVA_NADPISU );
           snprintf( buffer, BUFFER_SIZE, "  %s: ", nadpis );
           buffer[BUFFER_SIZE-1]=0;
-          buffer[0] = toupper(buffer[0]);
+          buffer[2] = toupper(buffer[2]); //POZOR! Pokud se zmeni format, je treba zde upravit index - ma to mirit na prvni pismeno nadpisu.
           x_offset = extdisplay->printUTF8( buffer, x_offset );
 
           extdisplay->display->setTextColor( BARVA_TEXTU );
