@@ -24,11 +24,11 @@ void formatTime( char * target, int dnes, int hour, struct tm * cas )
     if( cas->tm_yday == dnes ) {
         sprintf( target, "%02d:%02d", cas->tm_hour, cas->tm_min );
     } else if( cas->tm_yday == dnes + 1 ) {
-        if( cas->tm_hour < hour ) {
-            sprintf( target, "%02d:%02d", cas->tm_hour, cas->tm_min );
-        } else {
+        // if( cas->tm_hour < hour ) {
+        //    sprintf( target, "%02d:%02d", cas->tm_hour, cas->tm_min );
+        //} else {
             sprintf( target, "z%02d:%02d", cas->tm_hour, cas->tm_min );
-        }
+        // }
     } else if( cas->tm_yday == dnes + 2 ) {
         sprintf( target, "p%02d:%02d", cas->tm_hour, cas->tm_min );
     } else {
