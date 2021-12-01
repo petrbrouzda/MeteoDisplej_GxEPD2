@@ -108,8 +108,6 @@ void InfoMesic::compute() {
 
 }
 
-#define Y_OFFSET_IKONY 10
-
 /**
  * Mapovani faze mesice na obrazky v pouzitem fontu MoonPhases
  * https://www.dafont.com/moon-phases.font
