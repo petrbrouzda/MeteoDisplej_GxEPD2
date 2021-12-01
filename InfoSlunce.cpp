@@ -59,7 +59,7 @@ int InfoSlunce::drawData( ExtDisplay * extdisplay, bool firstRun ) {
     }
 
     extdisplay->posY += Y_OFFSET_IKONY;
-    extdisplay->setFont( fnt_Meteocons30() );
+    extdisplay->setFont( fnt_Meteocons20() );
     extdisplay->display->setTextColor( BARVA_NADPISU );
     int x_offset = extdisplay->printUTF8( "1" );
 
@@ -67,7 +67,7 @@ int InfoSlunce::drawData( ExtDisplay * extdisplay, bool firstRun ) {
     extdisplay->setFont( fnt_YanoneSB13() );
     extdisplay->display->setTextColor( BARVA_TEXTU );
     char buffer[50];
-    sprintf( buffer, "%s - %s", this->sunRise, this->sunSet );
+    sprintf( buffer, " {%s }%s", this->sunRise, this->sunSet );
     x_offset = extdisplay->printUTF8( buffer, x_offset );
     return x_offset;
 }

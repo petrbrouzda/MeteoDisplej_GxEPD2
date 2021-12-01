@@ -6,6 +6,6 @@
 
 const GFXfont * fnt_YanoneSB13();
 const GFXfont * fnt_MoonPhases30();
-const GFXfont * fnt_Meteocons30();
+const GFXfont * fnt_Meteocons20();
 
 #endif
