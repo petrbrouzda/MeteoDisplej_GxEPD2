@@ -77,6 +77,8 @@ boolean getNextWord() {
     return true;
 }
 
+#define DUMP_DEBUG_INFO 0
+
 /**
  * Vytiskne UTF-8 text na displej vcetne korektniho word-wrapu.
  * Tiskne se na nastavenou pozici X,Y, ktera je LEVY DOLNI roh prvniho pismene.
@@ -92,9 +94,8 @@ int ExtDisplay::printUTF8( const char * text, int x_offset  ) {
     strncpy( buffer, text, BUFFER_SIZE );
     buffer[BUFFER_SIZE-1] = 0;
     utf8tocp( buffer );  
-    //D/ this->logger->log( "[%s]", buffer );
-
-    //D/ this->logger->log( "  pos=%d,%d bbW=%d", this->posX, this->posY, this->boundingBoxWidth );
+    if( DUMP_DEBUG_INFO ) this->logger->log( "[%s]", buffer );
+    if( DUMP_DEBUG_INFO ) this->logger->log( "  pos=%d,%d bbW=%d xo=%d", this->posX, this->posY, this->boundingBoxWidth, x_offset );
 
     int x,y;
     x = this->posX + x_offset;
@@ -103,32 +104,32 @@ int ExtDisplay::printUTF8( const char * text, int x_offset  ) {
     initParser( buffer );
     while( true ) {
         if( ! getNextWord() ) break;
-        //D/ this->logger->log( "  > '%s'", oneWord );
+        if( DUMP_DEBUG_INFO ) this->logger->log( "  # '%s'", oneWord );
 
         int16_t x1, y1;
         uint16_t w, h;
         this->display->getTextBounds( (const char*)oneWord, x, y, &x1, &y1, &w, &h );
-        //D/ this->logger->log( "  max pos %d,%d size %d,%d", x1,y1, w,h );
+        if( DUMP_DEBUG_INFO )  this->logger->log( "  max pos %d,%d size %d,%d", x1,y1, w,h );
 
         if( ( x + w ) <= ( this->posX + this->boundingBoxWidth ) ) {
             this->display->setCursor( x, y );     
             this->display->print( oneWord );
             x += w;
-            //D/ this->logger->log( "  pokracuju, nova souradnice %d,%d", x,y );
+            if( DUMP_DEBUG_INFO )  this->logger->log( "  pokracuju, nova souradnice %d,%d", x,y );
         } else {
-            //D/ this->logger->log( "  @ %d,%d, w=%d", x,y, w );
+            if( DUMP_DEBUG_INFO )  this->logger->log( "  @ %d,%d, w=%d", x,y, w );
             
             x = this->posX;
             y += this->vyskaRadku;
 
             // musime znovu, protoze ve vyjimecnem pripade to zalomi text samo a vrati to w treba 392 bodu
             this->display->getTextBounds( (const char*)oneWord, x, y, &x1, &y1, &w, &h );
-            //D/ this->logger->log( "  @ %d,%d, w=%d", x,y, w );
+            if( DUMP_DEBUG_INFO )  this->logger->log( "  @ %d,%d, w=%d", x,y, w );
 
             this->display->setCursor( x, y );     
             this->display->print( oneWord );
             x += w;
-            //D/ this->logger->log( "  novy radek, nova souradnice %d,%d", x,y );
+            if( DUMP_DEBUG_INFO ) this->logger->log( "  novy radek, nova souradnice %d,%d", x,y );
         }
         if( delimiter==' ' ) {
             x += this->sirkaMezery;
@@ -136,7 +137,7 @@ int ExtDisplay::printUTF8( const char * text, int x_offset  ) {
     }
 
     this->posY = y;
-    return x;
+    return x - this->posX;
 }
 
 

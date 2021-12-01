@@ -19,7 +19,7 @@ Konfiguracni promenne:
 
 /*
  * ESP 32:
- * - V Arduino IDE MUSI byt nastaveno rozdeleni flash tak, aby bylo alespon 1 M filesystemu SPIFS !
+ * - V Arduino IDE MUSI byt nastaveno rozdeleni flash tak, aby bylo alespon kousek filesystemu SPIFS !
 */
 
 //+++++ RatatoskrIoT +++++
@@ -59,34 +59,26 @@ Konfiguracni promenne:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "soc/soc.h"
 #include "soc/rtc_cntl_reg.h"
 
+// konfigurace hardware
 #include "AppPins.h"
 #include "ePaperConfig.h"
-
-// pouzite fonty
-/*
-#include "src/fonts/FreeSansBold8pt7b.h"
-#include "src/fonts/FreeSansBold9pt7b.h"
-#include "src/fonts/FreeSansBold10pt7b.h"
-#include "src/fonts/IconsFont2.h"
-*/
-
-#include "src/gfxlatin2/gfxlatin2.h"
 
 // komponenty aplikace
 #include "ExtDisplay.h"
 #include "DataAplikace.h"
 #include "PredpovedAlojz.h"
 #include "InfoSlunce.h"
+#include "InfoMesic.h"
 
 
 
 DataAplikace * dataAplikace;
 PredpovedAlojz * predpovedAlojz;
 InfoSlunce * infoSlunce;
+InfoMesic * infoMesic;
 
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
@@ -124,8 +116,6 @@ void raGetAppName( char * target, int size )
 
 /** kanal pro pocet prekresleni */
 int ch1;  
-/** kanal pro poslani znacky o rebootu */
-int ch2; 
 
 void setup() {
 
@@ -157,16 +147,16 @@ void setup() {
   // kanaly pro posilani dat na server
   // pocet prekresleni displeje
   ch1 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"redraw", 4600 ); 
-  // pocet rebootu
-  ch2 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"reboot", 4600 );
   if( !deepSleepStart ) {
-    // pokud to neni probuzeni z deep sleepu, posleme informaci o cold startu
+    // pokud to neni probuzeni z deep sleepu, posleme tez informaci o cold startu
+    int ch2 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"reboot", 4600 );
     ra->postImpulseData( ch2, 15, 1 );
   }
 
   // konfigurace jednotlivych modulu
   predpovedAlojz = new PredpovedAlojz( logger, &config, dataAplikace );
   infoSlunce = new InfoSlunce( logger, dataAplikace );
+  infoMesic = new InfoMesic( logger, dataAplikace );
 
   startWifi();
   //------ user code here -----
@@ -203,22 +193,26 @@ void doDraw()
   display->firstPage();
   do
   {
-    extdisplay.setPos( 5, 25 );
+    extdisplay.setPos( 5, 22 );
+    infoSlunce->drawData( &extdisplay, firstRun );
+
+    // stejny radek jako slunce, ale v pulce displeje
+    extdisplay.posX = 210;
+    extdisplay.setBbFullWidth();
+    infoMesic->drawData( &extdisplay, firstRun );
+
+    extdisplay.setPos( 5, 55 );
+    extdisplay.setBbRightMargin( 5 );
 
     if( predpovedAlojz->hasData() ) {
-      extdisplay.setPos( 5, 25 );
-      extdisplay.setBbRightMargin( 5 );
       predpovedAlojz->drawData( &extdisplay, firstRun );
       // posY je nastavena na posledni radek textu z Aloise, tak ji posuneme na dalsi
       extdisplay.posY += extdisplay.vyskaRadku;
-
     } else {
       logger->log( "Alojz nema data" );
     }
 
     // posX/Y uz mame nastavenu
-    extdisplay.posY += 5;
-    infoSlunce->drawData( &extdisplay, firstRun );
 
     firstRun = false;
   }
@@ -244,7 +238,7 @@ void delej()
 
   predpovedAlojz->loadData();
   infoSlunce->compute();
-
+  infoMesic->compute();
 
   // a pak vse najednou vykreslime
   logger->log( "Vykresluji:");
@@ -390,6 +384,8 @@ Using library Adafruit_GFX_Library at version 1.10.0 in folder: C:\Users\brouzda
 Using library SPI at version 1.0 in folder: C:\Users\brouzda\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.6\libraries\SPI 
 Using library ArduinoJson at version 6.18.0 in folder: C:\Users\brouzda\Documents\Arduino\libraries\ArduinoJson 
 Using library SPIFFS at version 1.0 in folder: C:\Users\brouzda\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.6\libraries\SPIFFS 
+Using library MoonRise at version 2.0.1 in folder: C:\Users\brouzda\Documents\Arduino\libraries\MoonRise 
+Using library MoonPhase at version 1.0.3 in folder: C:\Users\brouzda\Documents\Arduino\libraries\MoonPhase 
 Using library Update at version 1.0 in folder: C:\Users\brouzda\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.6\libraries\Update 
 Using library Adafruit_BusIO at version 1.4.1 in folder: C:\Users\brouzda\Documents\Arduino\libraries\Adafruit_BusIO 
 Using library Wire at version 1.0.1 in folder: C:\Users\brouzda\AppData\Local\Arduino15\packages\esp32\hardware\esp32\1.0.6\libraries\Wire 

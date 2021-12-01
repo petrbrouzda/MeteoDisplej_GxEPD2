@@ -107,7 +107,7 @@ void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
           }
 
           extdisplay->display->setTextColor( BARVA_NADPISU );
-          snprintf( buffer, BUFFER_SIZE, "%s:", nadpis );
+          snprintf( buffer, BUFFER_SIZE, "%s: ", nadpis );
           buffer[BUFFER_SIZE-1]=0;
           buffer[0] = toupper(buffer[0]);
           x_offset = extdisplay->printUTF8( buffer );
@@ -126,7 +126,7 @@ void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
           }
 
           extdisplay->display->setTextColor( BARVA_NADPISU );
-          snprintf( buffer, BUFFER_SIZE, "%s:", nadpis );
+          snprintf( buffer, BUFFER_SIZE, "%s: ", nadpis );
           buffer[BUFFER_SIZE-1]=0;
           buffer[0] = toupper(buffer[0]);
           x_offset = extdisplay->printUTF8( buffer, x_offset );
@@ -149,7 +149,7 @@ void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
           }
 
           extdisplay->display->setTextColor( BARVA_NADPISU );
-          snprintf( buffer, BUFFER_SIZE, "%s:", nadpis );
+          snprintf( buffer, BUFFER_SIZE, "%s: ", nadpis );
           buffer[BUFFER_SIZE-1]=0;
           buffer[0] = toupper(buffer[0]);
           int x_offset = extdisplay->printUTF8( buffer );
