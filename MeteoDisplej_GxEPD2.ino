@@ -193,14 +193,14 @@ void doDraw()
   display->firstPage();
   do
   {
-    extdisplay.setPos( 5, 22 );
+    extdisplay.setPos( 1, 22 );
     infoSlunce->drawData( &extdisplay, firstRun );
 
-    // stejny radek jako slunce, ale v pulce displeje
-    extdisplay.posX = 210;
+    // stejny radek jako mesic, ale v pulce displeje
+    extdisplay.posX = 160;
     extdisplay.setBbFullWidth();
     infoMesic->drawData( &extdisplay, firstRun );
-
+    
     extdisplay.setPos( 5, 55 );
     extdisplay.setBbRightMargin( 5 );
 

@@ -26,7 +26,7 @@ void formatTime( char * target, int dnes, int hour, struct tm * cas )
     } else if( cas->tm_yday == dnes + 1 ) {
         // if( cas->tm_hour < hour ) {
         //    sprintf( target, "%02d:%02d", cas->tm_hour, cas->tm_min );
-        //} else {
+        // } else {
             sprintf( target, "z%02d:%02d", cas->tm_hour, cas->tm_min );
         // }
     } else if( cas->tm_yday == dnes + 2 ) {
@@ -145,46 +145,57 @@ int InfoMesic::drawData( ExtDisplay * extdisplay, bool firstRun ) {
     }
 
     char buf[50];
+    strcpy( buf, "  " );
+    int pocetCasu = 0;
+
+    if( this->isVisible ) {
+        // if(firstRun) logger->log( "mesic: zapad [%s], [%s - %s]", this->zapad, this->vychod, this->zapad2 );
+        if( this->zapad[0]!=0 ) {
+            sprintf( buf+strlen(buf), "}%s  ", this->zapad);
+            pocetCasu++;
+        }
+        if( this->vychod[0]!=0 ) {
+            sprintf( buf+strlen(buf), "{%s  ", this->vychod);
+            pocetCasu++;
+        }
+        if( this->zapad2[0]!=0 ) {
+            sprintf( buf+strlen(buf), "}%s", this->zapad2 );
+            pocetCasu++;
+        }
+    } else {
+        // if(firstRun) logger->log( "mesic: [%s - %s]", this->vychod, this->zapad );
+        if( this->vychod[0]!=0 ) {
+            sprintf( buf+strlen(buf), "{%s  ", this->vychod);
+            pocetCasu++;
+        }
+        if( this->zapad[0]!=0 ) {
+            sprintf( buf+strlen(buf), "}%s", this->zapad);
+            pocetCasu++;
+        }
+    }
+    if(firstRun) logger->log( "> mesic: %s", buf );
+
+    if( pocetCasu<3 ) {
+        extdisplay->posX += 70;
+        extdisplay->setBbFullWidth();
+    }
 
     extdisplay->posY += Y_OFFSET_IKONY;
     extdisplay->setFont( fnt_MoonPhases15() );
     extdisplay->display->setTextColor( BARVA_TEXTU );
-    buf[0] = c; buf[1] = 0;
-    int x_offset = extdisplay->printUTF8( buf );
+    char tmp[3];
+    tmp[0] = c; tmp[1] = 0;
+    int x_offset = extdisplay->printUTF8( tmp );
 
     // na me hloupe cenovce je tenka svisla cara skoro neviditelna, takze mesic vytisknu jeste jednou o bod posunuty
     extdisplay->posX--;
-    extdisplay->printUTF8( buf );
+    extdisplay->printUTF8( tmp );
     extdisplay->posX++;
 
     extdisplay->posY -= Y_OFFSET_IKONY;
     extdisplay->setFont( fnt_YanoneSB13() );
     extdisplay->display->setTextColor( BARVA_TEXTU );
 
-    strcpy( buf, "  " );
-
-    if( this->isVisible ) {
-        // if(firstRun) logger->log( "mesic: zapad [%s], [%s - %s]", this->zapad, this->vychod, this->zapad2 );
-        if( this->zapad[0]!=0 ) {
-            sprintf( buf+strlen(buf), "}%s  ", this->zapad);
-        }
-        if( this->vychod[0]!=0 ) {
-            sprintf( buf+strlen(buf), "{%s  ", this->vychod);
-        }
-        /* if( this->zapad2[0]!=0 ) {
-            sprintf( buf+strlen(buf), "}%s ", this->zapad2 );
-        } */
-    } else {
-        // if(firstRun) logger->log( "mesic: [%s - %s]", this->vychod, this->zapad );
-        if( this->vychod[0]!=0 ) {
-            sprintf( buf+strlen(buf), "{%s  ", this->vychod);
-        }
-        if( this->zapad[0]!=0 ) {
-            sprintf( buf+strlen(buf), "}%s", this->zapad);
-        }
-    }
-    if(firstRun) logger->log( "> mesic: %s", buf );
-    
     x_offset = extdisplay->printUTF8( buf, x_offset );
     return x_offset;
 }

@@ -27,7 +27,7 @@ void PredpovedAlojz::loadData()
         this->config->getString( "url_alojz", "https://alojz.cz/api/v1/solution?url_id=/" ),
         this->dataAplikace->misto_alojz );
 
-    logger->log( "Stahuji varovani: %s", url );
+    logger->log( "Stahuji: %s", url );
 
     HTTPClient http;
 
