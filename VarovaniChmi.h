@@ -1,9 +1,9 @@
 /**
- * Lidsky citelna predpoved z https://alojz.cz/praha
+ * Varování ČHMÚ
  */ 
 
-#ifndef P_ALOJZ_H
-#define P_ALOJZ_H
+#ifndef P_CHMI_WARNINGS_H
+#define P_CHMI_WARNINGS_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,13 +14,14 @@
 #include "src/ra/ratatoskr.h"
 #include "DataAplikace.h"
 
-class PredpovedAlojz
+class VarovaniChmi
 {
     public:
-        PredpovedAlojz( raLogger * logger, raConfig * config , DataAplikace * dataAplikace);
+        VarovaniChmi( raLogger * logger, raConfig * config , DataAplikace * dataAplikace);
         void loadData();
         bool hasData();
-        void drawData( ExtDisplay * extdisplay, bool firstRun );
+        int drawData( ExtDisplay * extdisplay, bool firstRun );
+        bool jsouNejakaVarovani();
 
     private:
         raLogger * logger;

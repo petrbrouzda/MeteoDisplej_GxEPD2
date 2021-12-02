@@ -5,13 +5,18 @@
 80 MHz / 40 MHz 
 
 Konfiguracni promenne:
-  lat
-  lon
-  alt
-  idorp
-  name
-  alojz - jmeno mista v Alojzovi
-  url_alojz - https://alojz.cz/api/v1/solution?url_id=/
+
+  1) NUTNE pro provoz:
+    lat - zemepisna sirka, DD.DDD
+    lon - zemepisna delka, DD.DDD
+    alt - nadmorska vyska
+    idorp - ID obce s rozsirenou pusobnosti (pro varovani CHMU)
+    name - jen zobrazovane jmeno
+    alojz - jmeno mista v Alojzovi
+
+  2) S funkcnimi defaulty:
+    url_alojz - https://alojz.cz/api/v1/solution?url_id=/
+    url_varovani - http://lovecka.info/ChmiWarnings1
   
  * Konfiguracni portal se spusti automaticky pokud zarizeni nema konfiguraci.
  * Nebo je mozne jej spustit tlacitkem FLASH (D0) - stisknout a drzet tlacitko >3 sec pote, co se pri startu rychle rozblika indikacni LED. 
@@ -72,6 +77,7 @@ Konfiguracni promenne:
 #include "PredpovedAlojz.h"
 #include "InfoSlunce.h"
 #include "InfoMesic.h"
+#include "VarovaniCHMI.h"
 
 
 
@@ -79,6 +85,7 @@ DataAplikace * dataAplikace;
 PredpovedAlojz * predpovedAlojz;
 InfoSlunce * infoSlunce;
 InfoMesic * infoMesic;
+VarovaniChmi * varovaniChmi;
 
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
@@ -157,6 +164,7 @@ void setup() {
   predpovedAlojz = new PredpovedAlojz( logger, &config, dataAplikace );
   infoSlunce = new InfoSlunce( logger, dataAplikace );
   infoMesic = new InfoMesic( logger, dataAplikace );
+  varovaniChmi = new VarovaniChmi( logger, &config, dataAplikace );
 
   startWifi();
   //------ user code here -----
@@ -206,10 +214,20 @@ void doDraw()
 
     if( predpovedAlojz->hasData() ) {
       predpovedAlojz->drawData( &extdisplay, firstRun );
-      // posY je nastavena na posledni radek textu z Aloise, tak ji posuneme na dalsi
-      extdisplay.posY += extdisplay.vyskaRadku;
+      // posY je nastavena na dalsi radku
     } else {
       logger->log( "Alojz nema data" );
+    }
+
+    int radkuVarovani = 0;
+    if( varovaniChmi->hasData() ) {
+      radkuVarovani = varovaniChmi->drawData( &extdisplay, firstRun );
+      // posY je nastavena na dalsi radku
+      if( radkuVarovani==0 ) {
+        logger->log( "CHMI ma data, ale neni zadne varovani" );  
+      }
+    } else {
+      logger->log( "CHMI nema data" );
     }
 
     // posX/Y uz mame nastavenu
@@ -237,6 +255,7 @@ void delej()
   // nejprve stahneme vsechna data a vse si spocteme
 
   predpovedAlojz->loadData();
+  varovaniChmi->loadData();
   infoSlunce->compute();
   infoMesic->compute();
 

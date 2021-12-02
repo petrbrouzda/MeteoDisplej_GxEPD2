@@ -61,7 +61,7 @@ void PredpovedAlojz::loadData()
 }
 
 
-boolean PredpovedAlojz::hasData()
+bool PredpovedAlojz::hasData()
 {
     if( this->jsonData!=NULL 
         && ( time(NULL) - this->casStazeni ) < DATA_MAX_AGE ) {
@@ -158,5 +158,5 @@ void PredpovedAlojz::drawData( ExtDisplay * extdisplay, bool firstRun )
           extdisplay->printUTF8( text, x_offset );
         }
     }
-
+    extdisplay->posY += extdisplay->vyskaRadku;
 }
