@@ -215,6 +215,7 @@ void doDraw()
     if( predpovedAlojz->hasData() ) {
       predpovedAlojz->drawData( &extdisplay, firstRun );
       // posY je nastavena na dalsi radku
+      extdisplay.posX += 5;
     } else {
       logger->log( "Alojz nema data" );
     }

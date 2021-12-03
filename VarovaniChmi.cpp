@@ -93,10 +93,12 @@ boolean VarovaniChmi::hasData()
 }
 
 
+#define VAROVANI_NEMAM_IKONU "a"
+
 char * getIcon( const char * icon )
 {
     if( icon==NULL ) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     }
 
     if( strcasecmp( icon, "Wind" )==0) {
@@ -112,28 +114,28 @@ char * getIcon( const char * icon )
     } else if( strcasecmp( icon, "low-temperature" )==0) {
         return (char*)"'";
     } else if( strcasecmp( icon, "coastalevent" )==0) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     } else if( strcasecmp( icon, "forest-fire" )==0) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     } else if( strcasecmp( icon, "avalanches" )==0) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     } else if( strcasecmp( icon, "Rain" )==0) {
         return (char*)"8";
     } else if( strcasecmp( icon, "unknown" )==0) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     } else if( strcasecmp( icon, "flooding" )==0) {
-        return (char*)"G";
+        return (char*)VAROVANI_NEMAM_IKONU;
     } else if( strcasecmp( icon, "rain-flood" )==0) {
         return (char*)"8";
     } else {
-        return (char*)"x";
+        return (char*)VAROVANI_NEMAM_IKONU;
     }
 }
 
 
 #define BUFFER_SIZE 100
 
-#define OFFSET_IKONY_Y 15
+#define OFFSET_IKONY_Y 5
 
 int VarovaniChmi::drawData( ExtDisplay * extdisplay, bool firstRun )
 {
@@ -167,21 +169,26 @@ int VarovaniChmi::drawData( ExtDisplay * extdisplay, bool firstRun )
         } else {
             extdisplay->display->setTextColor( BARVA_IKONA_VAROVANI_L );
         }
-        extdisplay->setFont( fnt_Meteocons20() );
+        extdisplay->setFont( fnt_Meteocons15() );
         extdisplay->posY += OFFSET_IKONY_Y;
         x_offset = extdisplay->printUTF8( getIcon(type) ); 
         extdisplay->posY -= OFFSET_IKONY_Y;
 
         logger->log( "> [%s %s] %s ", iconColor, type, name );
 
-        extdisplay->setFont( fnt_YanoneSB13() );
-        extdisplay->display->setTextColor( BARVA_TEXTU );
-        extdisplay->printUTF8( name, x_offset );
+        int prevX = extdisplay->posX;
+        extdisplay->setFont( fnt_YanoneSB11() );
+        extdisplay->posX += x_offset + 2*extdisplay->sirkaMezery;
+        extdisplay->setBbFullWidth();
 
-        extdisplay->posY += extdisplay->vyskaRadku;
+        extdisplay->display->setTextColor( BARVA_TEXTU );
+        x_offset = extdisplay->printUTF8( name  );
+
+        // extdisplay->setFont( fnt_YanoneSB11() );
+        // extdisplay->posY += extdisplay->vyskaRadku;
 
         char casInfo[50];
-        casInfo[0]=0;
+        strcpy( casInfo, " " );
 
         const char* stav = (* this->jsonData)["events"][i]["in_progress"];
         if( stav!=NULL && stav[0]=='Y' ) {
@@ -203,12 +210,12 @@ int VarovaniChmi::drawData( ExtDisplay * extdisplay, bool firstRun )
             strcpy( casInfo, " " );
         }
 
-        extdisplay->setFont( fnt_YanoneSB13() );
         extdisplay->display->setTextColor( BARVA_TEXTU );
         extdisplay->printUTF8( casInfo, x_offset );
 
         radku++;
         extdisplay->posY += extdisplay->vyskaRadku;
+        extdisplay->posX = prevX;
 
         if( radku==MAX_VAROVANI ) {
             // konec, uz je jich dost
