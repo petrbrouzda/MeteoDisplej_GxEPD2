@@ -17,6 +17,7 @@ Konfiguracni promenne:
   2) S funkcnimi defaulty:
     url_alojz - https://alojz.cz/api/v1/solution?url_id=/
     url_varovani - http://lovecka.info/ChmiWarnings1
+    url_predpoved - http://lovecka.info/YrNoProvider1
   
  * Konfiguracni portal se spusti automaticky pokud zarizeni nema konfiguraci.
  * Nebo je mozne jej spustit tlacitkem FLASH (D0) - stisknout a drzet tlacitko >3 sec pote, co se pri startu rychle rozblika indikacni LED. 
@@ -75,9 +76,10 @@ Konfiguracni promenne:
 #include "ExtDisplay.h"
 #include "DataAplikace.h"
 #include "PredpovedAlojz.h"
+#include "PredpovedYrno.h"
 #include "InfoSlunce.h"
 #include "InfoMesic.h"
-#include "VarovaniCHMI.h"
+#include "VarovaniChmi.h"
 
 
 
@@ -86,6 +88,7 @@ PredpovedAlojz * predpovedAlojz;
 InfoSlunce * infoSlunce;
 InfoMesic * infoMesic;
 VarovaniChmi * varovaniChmi;
+PredpovedYrno * predpovedYrno;
 
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
@@ -165,6 +168,7 @@ void setup() {
   infoSlunce = new InfoSlunce( logger, dataAplikace );
   infoMesic = new InfoMesic( logger, dataAplikace );
   varovaniChmi = new VarovaniChmi( logger, &config, dataAplikace );
+  predpovedYrno = new PredpovedYrno( logger, &config, dataAplikace );
 
   startWifi();
   //------ user code here -----
@@ -215,7 +219,7 @@ void doDraw()
     if( predpovedAlojz->hasData() ) {
       predpovedAlojz->drawData( &extdisplay, firstRun );
       // posY je nastavena na dalsi radku
-      extdisplay.posX += 5;
+      extdisplay.posY += 5;
     } else {
       logger->log( "Alojz nema data" );
     }
@@ -231,7 +235,11 @@ void doDraw()
       logger->log( "CHMI nema data" );
     }
 
-    // posX/Y uz mame nastavenu
+    if( predpovedYrno->hasData() ) {
+      predpovedYrno->drawData( &extdisplay, firstRun );
+    } else {
+      logger->log( "YR.NO nema data" );
+    }
 
     firstRun = false;
   }
@@ -257,6 +265,7 @@ void delej()
 
   predpovedAlojz->loadData();
   varovaniChmi->loadData();
+  predpovedYrno->loadData();
   infoSlunce->compute();
   infoMesic->compute();
 
