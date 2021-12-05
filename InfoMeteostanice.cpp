@@ -85,7 +85,7 @@ boolean InfoMeteostanice::hasData()
 #define BOX_HEIGHT 58
 
 
-void printOneBox( ExtDisplay * extdisplay, int posX, int posY, char * nadpis, char * text, char * teplota ) {
+void printOneBox( ExtDisplay * extdisplay, int posX, int posY, char * nadpis, char * teplota, char * srazky ) {
 
     extdisplay->setFont( fnt_YanoneSB11() );
     extdisplay->display->setTextColor( BARVA_NADPISU );
@@ -94,10 +94,10 @@ void printOneBox( ExtDisplay * extdisplay, int posX, int posY, char * nadpis, ch
 
     extdisplay->display->setTextColor( BARVA_TEXTU );
     extdisplay->setPos( posX, posY+TEXT_ROW_SPACING + ROW_OFFSET ); 
-    extdisplay->printUTF8( text ); 
+    extdisplay->printUTF8( teplota ); 
 
     extdisplay->setPos( posX, posY+TEXT_ROW_SPACING+TEXT_ROW_SPACING + ROW_OFFSET -4 ); 
-    extdisplay->printUTF8( teplota ); 
+    extdisplay->printUTF8( srazky ); 
 }
 
 
@@ -164,28 +164,44 @@ int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
     posX += BOX_WIDTH;
     extdisplay->display->drawLine( posX-3, posY, posX-3, posY+BOX_HEIGHT, GxEPD_BLACK );
     sprintf( buffer, "%.0f/%.0f°C", dnes_temp_min, dnes_temp_max );
-    sprintf( buffer2, "%.1f mm", dnes_srazky );
+    if( dnes_srazky!=0.0 ) {
+        sprintf( buffer2, "%.1f mm", dnes_srazky );
+    } else {
+        sprintf( buffer2, " " );
+    }
     printOneBox( extdisplay, posX, posY, "Dnes", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
     extdisplay->display->drawLine( posX-3, posY, posX-3, posY+BOX_HEIGHT, GxEPD_BLACK );
     sprintf( buffer, "%.0f/%.0f°C", noc_temp_min, noc_temp_max );
-    sprintf( buffer2, "%.1f mm", noc_srazky );
+    if( noc_srazky!=0.0 ) {
+        sprintf( buffer2, "%.1f mm", noc_srazky );
+    } else {
+        sprintf( buffer2, " " );
+    }
     printOneBox( extdisplay, posX, posY, "Noc", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
     extdisplay->display->drawLine( posX-3, posY, posX-3, posY+BOX_HEIGHT, GxEPD_BLACK );
     sprintf( buffer, "%.0f/%.0f°C", vcera_temp_min, vcera_temp_max );
-    sprintf( buffer2, "%.1f mm", vcera_srazky );
+    if( vcera_srazky!=0.0 ) {
+        sprintf( buffer2, "%.1f mm", vcera_srazky );
+    } else {
+        sprintf( buffer2, " " );
+    }
     printOneBox( extdisplay, posX, posY, "Včera", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
     extdisplay->display->drawLine( posX-3, posY, posX-3, posY+BOX_HEIGHT, GxEPD_BLACK );
     sprintf( buffer, "%.0f/%.0f°C", tyden_temp_min, tyden_temp_max );
-    sprintf( buffer2, "%.1f mm", tyden_srazky );
+    if( tyden_srazky!=0.0 ) {
+        sprintf( buffer2, "%.1f mm", tyden_srazky );
+    } else {
+        sprintf( buffer2, " " );
+    }
     printOneBox( extdisplay, posX, posY, "Týden", buffer, buffer2 );
 
     return 0;
