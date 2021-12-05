@@ -75,49 +75,12 @@ boolean PredpovedYrno::hasData()
 }
 
 
-#define VAROVANI_NEMAM_IKONU "a"
-
-char * getIconYrno( const char * icon )
-{
-    if( icon==NULL ) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    }
-
-    if( strcasecmp( icon, "Wind" )==0) {
-        return (char*)"F";
-    } else if( strcasecmp( icon, "snow-ice" )==0) {
-        return (char*)"W";
-    } else if( strcasecmp( icon, "Thunderstorm" )==0) {
-        return (char*)"6";
-    } else if( strcasecmp( icon, "Fog" )==0) {
-        return (char*)"M";
-    } else if( strcasecmp( icon, "high-temperature" )==0) {
-        return (char*)"'";
-    } else if( strcasecmp( icon, "low-temperature" )==0) {
-        return (char*)"'";
-    } else if( strcasecmp( icon, "coastalevent" )==0) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    } else if( strcasecmp( icon, "forest-fire" )==0) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    } else if( strcasecmp( icon, "avalanches" )==0) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    } else if( strcasecmp( icon, "Rain" )==0) {
-        return (char*)"8";
-    } else if( strcasecmp( icon, "unknown" )==0) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    } else if( strcasecmp( icon, "flooding" )==0) {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    } else if( strcasecmp( icon, "rain-flood" )==0) {
-        return (char*)"8";
-    } else {
-        return (char*)VAROVANI_NEMAM_IKONU;
-    }
-}
 
 
-#define BUFFER_SIZE 100
 
-#define OFFSET_IKONY_Y 5
+#define SIRKA_SLOUPCE 50
+#define POCET_SLOUPCU 8
+#define ZUZENI_RADKU -2
 
 int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
 {
@@ -129,9 +92,14 @@ int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
 
     char buffer[100];
 
-    extdisplay->posY += 5;
+    extdisplay->posY += 10;
 
-    for( int i = 0; i<10; i++ ) {
+    int x_offset, x_offset2;
+    int x = extdisplay->posX;
+
+    extdisplay->display->setTextColor( BARVA_TEXTU );
+
+    for( int i = 0; i<POCET_SLOUPCU; i++ ) {
         const char* hour = (* this->jsonData)["hours"][i]["hour"];
         if( hour==NULL ) break;
 
@@ -156,6 +124,38 @@ int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
         strcat( buffer, "] " );
 
         if( firstRun) this->logger->log( "## %s", buffer );
+
+        extdisplay->posX = x;
+        extdisplay->setBbFullWidth();
+
+        extdisplay->setFont( fnt_YanoneSB11() );
+        sprintf( buffer, "%s h", hour );
+        extdisplay->printUTF8( buffer  );
+
+        extdisplay->posY += extdisplay->vyskaRadku + ZUZENI_RADKU;
+        sprintf( buffer, "%.0f", temp );
+        x_offset = extdisplay->printUTF8( buffer  );
+        
+        extdisplay->setFont( fnt_YanoneSB9() );
+        sprintf( buffer, " °C" );
+        extdisplay->printUTF8( buffer, x_offset );
+        extdisplay->setFont( fnt_YanoneSB11() );
+        
+        if( rain > 0 ) {
+            sprintf( buffer, "%.1f", rain );
+            extdisplay->posY += extdisplay->vyskaRadku + ZUZENI_RADKU;
+            x_offset = extdisplay->printUTF8( buffer );
+            
+            extdisplay->setFont( fnt_YanoneSB9() );
+            sprintf( buffer, " mm" );
+            extdisplay->printUTF8( buffer, x_offset );
+            extdisplay->setFont( fnt_YanoneSB11() );
+
+            extdisplay->posY -= extdisplay->vyskaRadku + ZUZENI_RADKU;
+        } 
+
+        extdisplay->posY -= extdisplay->vyskaRadku + ZUZENI_RADKU;
+        x += SIRKA_SLOUPCE;
     }
     
     return 0;
