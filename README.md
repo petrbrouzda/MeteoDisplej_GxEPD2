@@ -10,6 +10,8 @@ Zobrazuje:
 - předpověď po hodinách z yr.no
 - stav lokální meteostanice
 
+![Ukázka displeje](/doc/display.jpg "Ukázka displeje")
+
 Jednotlivé vykreslované prvky jsou jako samostatné objekty; je tedy možné je snadno vytáhnout a použít ve vlastní aplikaci.
 
 Defaultní konfigurace předpokládá dvoubarevný 4" ePaper displej 400x300 bodů. Displej se ovládá přes GxEPD2. Konfigurace displeje je v **ePaperConfig.h.** Konfigurace připojení displeje (pinů) je v **AppPins.h.**  Mělo by to fungovat s každým displejem podporovaným v GxEPD2; samozřejmě ale pro displeje jiných rozměrů je třeba změnit rozložení prvků na ploše.
@@ -36,6 +38,8 @@ alojz=jablonec-nad-nisou
 - ALOJZ je jméno lokality, jaké najdete v URL na alojz.cz poté, co kliknete na jméno města
 - NAME je zobrazované jméno místa
 - LAT/LON/ALT je zeměpisná souřadnice a nadmořská výška
+
+České fonty vznikly postupem popsaným zde https://github.com/petrbrouzda/fontconvert8-iso8859-2 
 
 ---
 
