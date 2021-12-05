@@ -21,7 +21,7 @@ Aplikace není optimalizovaná na paměť, není tedy možné ji provozovat na E
 Není také optimalizovaná na spotřebu - počítá s tím, že procesor spí maximálně light sleepem (paměť zůstává zachovaná) a aplikace je tak odolná situaci, kdy nějakou dobu není dostupný nějaký online zdroj. Nicméně to lze snadno změnit a uspávat do deep sleep, pokud by spotřeba byla prioritní.
 
 Při prvním startu se aplikace přepne do konfiguračního portálu - připojte se z telefonu na AP "RA_<nějaké číslo>" s heslem "aaaaaaaa" a z webového prohlížeče nakonfigurujte připojení na wifi.
-Jak získáte potřebné konfigurační hodnoty [čtěte zde](https://pebrou.wordpress.com/2021/01/15/kostra-hotove-iot-aplikace-pro-esp32-esp8266-a-k-tomu-nejaky-server-3-n/#a-jak-to-spustit). Aplikace je postavená na IoT knihovně RatatoskrIoT, proto je zde potřeba vložit přístupové údaje k serveru. Knihovna zajišťuje vzdálenou konfiguraci, OTA updaty, telemetrii a odesílání log souborů
+Jak získáte potřebné konfigurační hodnoty [čtěte zde](https://pebrou.wordpress.com/2021/01/15/kostra-hotove-iot-aplikace-pro-esp32-esp8266-a-k-tomu-nejaky-server-3-n/#a-jak-to-spustit). Aplikace je postavená na IoT knihovně [RatatoskrIoT](https://github.com/petrbrouzda/RatatoskrIoT), proto je zde potřeba vložit přístupové údaje k serveru. Knihovna zajišťuje vzdálenou konfiguraci, OTA updaty, telemetrii a odesílání log souborů
 
 Konfiguraci zobrazovaných dat, tedy zejména lokalitu, pro kterou se dává předpověď a vyhledávají varování ČHMÚ, můžete buď změnit nastavením defaultů v DataAplikace::DataAplikace(), nebo následně zaslat jako nastavení konfigurace ze serveru.
 
