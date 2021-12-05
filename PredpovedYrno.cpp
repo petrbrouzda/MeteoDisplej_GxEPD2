@@ -78,9 +78,12 @@ boolean PredpovedYrno::hasData()
 
 
 
-#define SIRKA_SLOUPCE 50
-#define POCET_SLOUPCU 8
-#define ZUZENI_RADKU -2
+#define SIRKA_PRVNIHO_SLOUPCE 60
+#define SIRKA_SLOUPCE 35
+#define POCET_SLOUPCU 9
+#define ZMENA_VYSKY_RADKU 1
+#define OFFSET_LINKY_Y 4
+#define OFFSET_LINKY_X -4
 
 int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
 {
@@ -94,12 +97,39 @@ int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
 
     extdisplay->posY += 10;
 
-    int x_offset, x_offset2;
-    int x = extdisplay->posX;
+    int x_offset;
+    int x = 5;
 
     extdisplay->display->setTextColor( BARVA_TEXTU );
+    extdisplay->setFont( fnt_YanoneSB11() );
+    int vyskaRadku = extdisplay->vyskaRadku + ZMENA_VYSKY_RADKU;
+
+    
+    extdisplay->display->drawLine( x, extdisplay->posY + OFFSET_LINKY_Y, 
+                                    extdisplay->display->width() - 1, extdisplay->posY + OFFSET_LINKY_Y , 
+                                    GxEPD_BLACK);
+
+    extdisplay->display->drawLine( x, extdisplay->posY + OFFSET_LINKY_Y + vyskaRadku, 
+                                    extdisplay->display->width() - 1,  extdisplay->posY + OFFSET_LINKY_Y + vyskaRadku, 
+                                    GxEPD_BLACK);
+
+    
+    extdisplay->posX = x;
+    extdisplay->printUTF8( "Čas" );
+    extdisplay->posY += vyskaRadku;
+    extdisplay->printUTF8( "Teplota" );
+    extdisplay->posY += vyskaRadku;
+    extdisplay->printUTF8( "Srážky" );
+    extdisplay->posY -= vyskaRadku + vyskaRadku;
+
+    x = x + SIRKA_PRVNIHO_SLOUPCE;
 
     for( int i = 0; i<POCET_SLOUPCU; i++ ) {
+
+        extdisplay->display->drawLine( x + OFFSET_LINKY_X, extdisplay->posY - vyskaRadku + OFFSET_LINKY_Y, 
+                                       x + OFFSET_LINKY_X, extdisplay->posY + vyskaRadku + OFFSET_LINKY_Y + vyskaRadku, 
+                                    GxEPD_BLACK);
+
         const char* hour = (* this->jsonData)["hours"][i]["hour"];
         if( hour==NULL ) break;
 
@@ -117,7 +147,6 @@ int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
         const char* icon = (* this->jsonData)["hours"][i]["icon"];
 
         sprintf( buffer, "[%s %s %.0f", hour, icon, temp );
-
         if( rain > 0 ) {
             sprintf( buffer+strlen(buffer), " %.1f mm", rain );
         } 
@@ -125,38 +154,29 @@ int PredpovedYrno::drawData( ExtDisplay * extdisplay, bool firstRun )
 
         if( firstRun) this->logger->log( "## %s", buffer );
 
+        extdisplay->setFont( fnt_YanoneSB11() );
+
         extdisplay->posX = x;
         extdisplay->setBbFullWidth();
+        sprintf( buffer, "%s", hour );
+        extdisplay->printUTF8( buffer );
 
-        extdisplay->setFont( fnt_YanoneSB11() );
-        sprintf( buffer, "%s h", hour );
-        extdisplay->printUTF8( buffer  );
-
-        extdisplay->posY += extdisplay->vyskaRadku + ZUZENI_RADKU;
+        extdisplay->posY += vyskaRadku;
         sprintf( buffer, "%.0f", temp );
-        x_offset = extdisplay->printUTF8( buffer  );
-        
-        extdisplay->setFont( fnt_YanoneSB9() );
-        sprintf( buffer, " °C" );
-        extdisplay->printUTF8( buffer, x_offset );
-        extdisplay->setFont( fnt_YanoneSB11() );
+        extdisplay->printUTF8( buffer  );
         
         if( rain > 0 ) {
             sprintf( buffer, "%.1f", rain );
-            extdisplay->posY += extdisplay->vyskaRadku + ZUZENI_RADKU;
-            x_offset = extdisplay->printUTF8( buffer );
-            
-            extdisplay->setFont( fnt_YanoneSB9() );
-            sprintf( buffer, " mm" );
-            extdisplay->printUTF8( buffer, x_offset );
-            extdisplay->setFont( fnt_YanoneSB11() );
-
-            extdisplay->posY -= extdisplay->vyskaRadku + ZUZENI_RADKU;
+            extdisplay->posY += vyskaRadku;
+            extdisplay->printUTF8( buffer );
+            extdisplay->posY -= vyskaRadku;
         } 
 
-        extdisplay->posY -= extdisplay->vyskaRadku + ZUZENI_RADKU;
+        extdisplay->posY -= vyskaRadku;
         x += SIRKA_SLOUPCE;
     }
+
+    extdisplay->posY += 3*vyskaRadku;
     
     return 0;
 }
