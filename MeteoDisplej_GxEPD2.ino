@@ -19,6 +19,13 @@ Konfiguracni promenne:
     url_varovani - http://lovecka.info/ChmiWarnings1
     url_predpoved - http://lovecka.info/YrNoProvider1
   
+  3) Pouze pokud chcete i informace z meteostanice (je definovano ZOBRAZ_DATA_Z_METEOSTANICE), s funkcnimi defaulty
+      meteo_url - http://lovecka.info/ra/json/meteo
+      meteo_token - 628hx2r7rn6s0u7z8amivkawtuq08vzom13mf2p0
+      meteo_id - 23
+      meteo_temp - bd358d05
+      meteo_rain - rain
+
  * Konfiguracni portal se spusti automaticky pokud zarizeni nema konfiguraci.
  * Nebo je mozne jej spustit tlacitkem FLASH (D0) - stisknout a drzet tlacitko >3 sec pote, co se pri startu rychle rozblika indikacni LED. 
  */
@@ -80,8 +87,9 @@ Konfiguracni promenne:
 #include "InfoSlunce.h"
 #include "InfoMesic.h"
 #include "VarovaniChmi.h"
+#include "InfoMeteostanice.h"
 
-
+#define ZOBRAZ_DATA_Z_METEOSTANICE
 
 DataAplikace * dataAplikace;
 PredpovedAlojz * predpovedAlojz;
@@ -89,6 +97,7 @@ InfoSlunce * infoSlunce;
 InfoMesic * infoMesic;
 VarovaniChmi * varovaniChmi;
 PredpovedYrno * predpovedYrno;
+InfoMeteostanice * infoMeteostanice;
 
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
@@ -170,6 +179,10 @@ void setup() {
   varovaniChmi = new VarovaniChmi( logger, &config, dataAplikace );
   predpovedYrno = new PredpovedYrno( logger, &config, dataAplikace );
 
+  #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
+    infoMeteostanice = new InfoMeteostanice( logger, &config, dataAplikace );
+  #endif
+
   startWifi();
   //------ user code here -----
 }
@@ -241,6 +254,16 @@ void doDraw()
       logger->log( "YR.NO nema data" );
     }
 
+    //TODO: kolize vysky displeje s daty z meteostanice - kdy co nezobrazit?
+
+    #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
+      if( infoMeteostanice->hasData() ) {
+        infoMeteostanice->drawData( &extdisplay, firstRun );
+      } else {
+        logger->log( "Meteostanice nema data" );
+      } 
+    #endif
+
     firstRun = false;
   }
   // tell the graphics class to transfer the buffer content (page) to the controller buffer
@@ -268,6 +291,11 @@ void delej()
   predpovedYrno->loadData();
   infoSlunce->compute();
   infoMesic->compute();
+
+  #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
+    infoMeteostanice->loadData();
+  #endif
+
 
   // a pak vse najednou vykreslime
   logger->log( "Vykresluji:");
