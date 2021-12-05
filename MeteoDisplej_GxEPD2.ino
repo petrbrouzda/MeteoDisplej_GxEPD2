@@ -141,17 +141,17 @@ int ch1;
 
 void setup() {
 
-  // musi byt driv nez ratatoskr_startup(), protoze spusti serial!
-  display1.init(115200); 
-  // a udelame si pointer pro predavani do objektu
-  display = &display1 ;
-
   // *** special handling for Waveshare ESP32 Driver board *** //
   // ********************************************************* //
   SPI.end(); // release standard SPI pins, e.g. SCK(18), MISO(19), MOSI(23), SS(5)
   //SPI: void begin(int8_t sck=-1, int8_t miso=-1, int8_t mosi=-1, int8_t ss=-1);
   SPI.begin(EPAPER_SCLK, SPI_MISO_UNUSED, EPAPER_MOSI, EPAPER_CS); // map and init SPI pins SCK(13), MISO(12), MOSI(14), SS(15)
   // *** end of special handling for Waveshare ESP32 Driver board *** //
+
+  // musi byt driv nez ratatoskr_startup(), protoze spusti serial!
+  display1.init(115200); 
+  // a udelame si pointer pro predavani do objektu
+  display = &display1 ;
 
   //+++++ RatatoskrIoT +++++
     // Mel by byt jako prvni v setup().
@@ -171,7 +171,7 @@ void setup() {
   ch1 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"redraw", 4600 ); 
   if( !deepSleepStart ) {
     // pokud to neni probuzeni z deep sleepu, posleme tez informaci o cold startu
-    int ch2 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"reboot", 4600 );
+    int ch2 = ra->defineChannel( DEVCLASS_IMPULSE_SUM, 7, (char*)"reboot", 0 );
     ra->postImpulseData( ch2, 15, 1 );
   }
 
@@ -272,7 +272,7 @@ void doDraw()
       } 
       poziceInfolisty = extdisplay.display->height() - infoMeteostanice->vyskaBloku();
     #elif 
-      poziceInfolisty = extdisplay.height();
+      poziceInfolisty = extdisplay.display->height();
     #endif
 
     extdisplay.setPos( 5, poziceInfolisty );
