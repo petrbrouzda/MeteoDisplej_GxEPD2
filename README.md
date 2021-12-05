@@ -57,6 +57,11 @@ V library manageru je nutné mít nainstalováno:
 - Adafruit_BusIO 1.4.1
 - ArduinoJson 6.18.0
 
+## Použité fonty
+- Meteocons https://www.alessioatzeni.com/meteocons/
+- moon-phases https://www.dafont.com/moon-phases.font
+- Yanone Kaffeesatz https://fonts.google.com/specimen/Yanone+Kaffeesatz
+
 ## Knihovny a kód třetích stran 
 
 Aplikace obsahují následující kód třetích stran ve formě zdrojových kódů distribuovaných přímo s aplikací (= nepoužívají se z library manageru):
