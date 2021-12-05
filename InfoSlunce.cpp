@@ -4,7 +4,7 @@
 
 #include "InfoSlunce.h"
 
-#include "src/sunset/sunset.h"
+#include <sunset.h>
 #include "src/fonts/fonts.h"
 
 InfoSlunce::InfoSlunce( raLogger * logger, DataAplikace * dataAplikace )
