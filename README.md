@@ -14,7 +14,7 @@ Zobrazuje:
 
 Jednotlivé vykreslované prvky jsou jako samostatné objekty; je tedy možné je snadno vytáhnout a použít ve vlastní aplikaci.
 
-Defaultní konfigurace předpokládá dvoubarevný 4" ePaper displej 400x300 bodů. Displej se ovládá přes GxEPD2. Konfigurace displeje je v **ePaperConfig.h.** Konfigurace připojení displeje (pinů) je v **AppPins.h.**  Mělo by to fungovat s každým displejem podporovaným v GxEPD2; samozřejmě ale pro displeje jiných rozměrů je třeba změnit rozložení prvků na ploše.
+Defaultní konfigurace předpokládá tříbarevný (černá/bílá/červená) 4" ePaper displej 400x300 bodů. Displej se ovládá přes GxEPD2. Konfigurace displeje je v **ePaperConfig.h.** Konfigurace připojení displeje (pinů) je v **AppPins.h.**  Mělo by to fungovat s každým displejem podporovaným v GxEPD2; samozřejmě ale pro displeje jiných rozměrů je třeba změnit rozložení prvků na ploše.
 
 Aplikace není optimalizovaná na paměť, není tedy možné ji provozovat na ESP8266. 
 
