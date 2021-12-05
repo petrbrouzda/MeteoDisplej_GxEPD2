@@ -88,6 +88,7 @@ Konfiguracni promenne:
 #include "InfoMesic.h"
 #include "VarovaniChmi.h"
 #include "InfoMeteostanice.h"
+#include "InfoLista.h"
 
 #define ZOBRAZ_DATA_Z_METEOSTANICE
 
@@ -98,6 +99,8 @@ InfoMesic * infoMesic;
 VarovaniChmi * varovaniChmi;
 PredpovedYrno * predpovedYrno;
 InfoMeteostanice * infoMeteostanice;
+InfoLista * infoLista;
+
 
 GxEPD2_GFX* display;
 ExtDisplay extdisplay;
@@ -178,6 +181,7 @@ void setup() {
   infoMesic = new InfoMesic( logger, dataAplikace );
   varovaniChmi = new VarovaniChmi( logger, &config, dataAplikace );
   predpovedYrno = new PredpovedYrno( logger, &config, dataAplikace );
+  infoLista = new InfoLista( logger, dataAplikace );
 
   #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
     infoMeteostanice = new InfoMeteostanice( logger, &config, dataAplikace );
@@ -254,15 +258,25 @@ void doDraw()
       logger->log( "YR.NO nema data" );
     }
 
-    //TODO: kolize vysky displeje s daty z meteostanice - kdy co nezobrazit?
+    int poziceInfolisty = extdisplay.posY + 1;
 
     #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
       if( infoMeteostanice->hasData() ) {
-        infoMeteostanice->drawData( &extdisplay, firstRun );
+        if( extdisplay.posY < extdisplay.display->height() - infoMeteostanice->vyskaBloku() ) {
+          infoMeteostanice->drawData( &extdisplay, firstRun );
+        } else {
+          logger->log( "Meteostanice ma data, ale nevejdou se na displej" );  
+        }
       } else {
         logger->log( "Meteostanice nema data" );
       } 
+      poziceInfolisty = extdisplay.display->height() - infoMeteostanice->vyskaBloku();
+    #elif 
+      poziceInfolisty = extdisplay.height();
     #endif
+
+    extdisplay.setPos( 5, poziceInfolisty );
+    infoLista->drawData( &extdisplay, firstRun, predpovedAlojz, predpovedYrno, varovaniChmi );
 
     firstRun = false;
   }

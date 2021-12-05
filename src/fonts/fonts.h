@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <GxEPD2_GFX.h>
 
+const GFXfont * fnt_YanoneSB10();
 const GFXfont * fnt_YanoneSB11();
 const GFXfont * fnt_YanoneSB13();
 const GFXfont * fnt_MoonPhases15();

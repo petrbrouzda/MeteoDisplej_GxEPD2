@@ -18,6 +18,7 @@ class InfoMeteostanice
 {
     public:
         InfoMeteostanice( raLogger * logger, raConfig * config , DataAplikace * dataAplikace);
+        int vyskaBloku();
         void loadData();
         bool hasData();
         int drawData( ExtDisplay * extdisplay, bool firstRun );

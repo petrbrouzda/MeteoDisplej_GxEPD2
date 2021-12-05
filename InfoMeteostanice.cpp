@@ -100,6 +100,10 @@ void printOneBox( ExtDisplay * extdisplay, int posX, int posY, char * nadpis, ch
     extdisplay->printUTF8( srazky ); 
 }
 
+int InfoMeteostanice::vyskaBloku( )
+{
+    return BOX_HEIGHT;
+}
 
 int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
 {
