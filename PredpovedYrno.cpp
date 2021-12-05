@@ -79,8 +79,8 @@ boolean PredpovedYrno::hasData()
 
 
 #define SIRKA_PRVNIHO_SLOUPCE 60
-#define SIRKA_SLOUPCE 35
-#define POCET_SLOUPCU 9
+#define SIRKA_SLOUPCE 34
+#define POCET_SLOUPCU 10
 #define ZMENA_VYSKY_RADKU 1
 #define OFFSET_LINKY_Y 4
 #define OFFSET_LINKY_X -4
