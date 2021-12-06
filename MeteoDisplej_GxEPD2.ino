@@ -198,6 +198,10 @@ void loop() {
   //----- RatatoskrIoT ----
 
   //++++++ user code here +++++
+  if( ! isWifiOn() ) {
+    // wifi je vypnute, nemame co delat, dame kratke uspani pro snizeni spotreby
+    ra->lightSleep( 3000000, false );
+  }
   //------ user code here ------
 }
 
