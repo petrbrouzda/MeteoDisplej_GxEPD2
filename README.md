@@ -14,7 +14,7 @@ Zobrazuje:
 
 Jednotlivé vykreslované prvky jsou jako samostatné objekty; je tedy možné je snadno vytáhnout a použít ve vlastní aplikaci.
 
-Defaultní konfigurace předpokládá tříbarevný (černá/bílá/červená) 4" ePaper displej 400x300 bodů. Displej se ovládá přes GxEPD2. Konfigurace displeje je v **ePaperConfig.h.** Konfigurace připojení displeje (pinů) je v **AppPins.h.**  Mělo by to fungovat s každým displejem podporovaným v GxEPD2; samozřejmě ale pro displeje jiných rozměrů je třeba změnit rozložení prvků na ploše.
+Defaultní konfigurace předpokládá tříbarevný (černá/bílá/červená) 4" ePaper displej 400x300 bodů. Displej se ovládá přes GxEPD2. Konfigurace displeje je v **ePaperConfig.h.** Konfigurace připojení displeje (pinů) je v **AppPins.h.**  Mělo by to fungovat s každým displejem podporovaným v GxEPD2; samozřejmě ale pro displeje jiných rozměrů je třeba změnit rozložení prvků na ploše. Pokud máte jen černobílý displej, pak nastavení barev je v DataAplikace.h.
 
 Aplikace není optimalizovaná na paměť, není tedy možné ji provozovat na ESP8266. 
 
@@ -67,7 +67,7 @@ V library manageru je nutné mít nainstalováno:
 Aplikace obsahují následující kód třetích stran ve formě zdrojových kódů distribuovaných přímo s aplikací (= nepoužívají se z library manageru):
 
 ### gfxlatin
-- src\gfxlatin2\*
+- src\gfxlatin2\
 - zdroj: https://www.sigmdel.ca/michel/program/misc/gfxfont_8bit_en.html
 - licence: BSD 2-Clause License
 - upraveno pro ISO-8859-2 viz https://github.com/petrbrouzda/fontconvert8-iso8859-2
