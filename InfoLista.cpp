@@ -33,11 +33,11 @@ int InfoLista::drawData( ExtDisplay * extdisplay, bool firstRun, PredpovedAlojz 
     }
 
     if( chybiData[0]!=0 ) {
-        sprintf( buffer+strlen(buffer), " - Chybi: %s", chybiData );
+        sprintf( buffer+strlen(buffer), " - Chybí: %s", chybiData );
     }
 
     if( varovaniChmi->hasData() && !varovaniChmi->jsouNejakaVarovani() ) {
-        sprintf( buffer+strlen(buffer), " - Zadna varovani" );
+        sprintf( buffer+strlen(buffer), " - Žádná varování" );
     }
 
     if( firstRun ) {
