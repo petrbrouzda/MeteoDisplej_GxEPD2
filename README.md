@@ -41,6 +41,8 @@ alojz=jablonec-nad-nisou
 
 České fonty vznikly postupem popsaným zde https://github.com/petrbrouzda/fontconvert8-iso8859-2 
 
+Výstrahy ČHMÚ si aplikace stahuje předžvýkané z této služby: https://github.com/petrbrouzda/ChmiWarnings, obdobně předpověď yr.no z https://github.com/petrbrouzda/YrNoProvider. Alojze bere napřímo z alojz.cz.
+
 ---
 
 
