@@ -10,6 +10,10 @@ Zobrazuje:
 - předpověď po hodinách z yr.no
 - stav lokální meteostanice
 
+*Ukázka displeje bez varování ČHMI, s předpovědí na dva dny (ukazuje se jen odpoledne). Nahoře je vidět fáze měsíce, dnešní západ měsíce a zítřejší východ a západ.*
+![Ukázka displeje](/doc/display2.jpg "Ukázka displeje")
+
+*Ukázka displeje s varováním ČHMI:*
 ![Ukázka displeje](/doc/display.jpg "Ukázka displeje")
 
 Jednotlivé vykreslované prvky jsou jako samostatné objekty; je tedy možné je snadno vytáhnout a použít ve vlastní aplikaci.
