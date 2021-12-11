@@ -9,7 +9,7 @@
    * Pouziva se pro OTA updaty.
    * Pokud OTA neplanujete pouit, muzete nechat APP_1
    */
-  #define APP_VERSION_ID "MetDisplay_v3.2" 
+  #define APP_VERSION_ID "MetDisplay_v3.3" 
 
 // ================================= zakladni rezim logovani
 
