@@ -44,6 +44,15 @@ void PredpovedAlojz::loadData()
 
         if( !de ) {
             logger->log( "OK parsed");
+
+            const char * text1 = (*doc)["day1"]["string"];
+            const char * text2 = (*doc)["day2"]["string"];
+            if( text1==NULL && text2==NULL ) {
+                logger->log( "Prazdna data Alojze, nepouziju je!");
+                delete doc;
+                return;
+            }
+
             if( this->jsonData!=NULL ) {
                 delete this->jsonData;
             }
@@ -51,6 +60,7 @@ void PredpovedAlojz::loadData()
             this->casStazeni = time(NULL);
         } else {
             logger->log( "JsonParse: error %s", de.c_str() );
+            delete doc;
         }
     } else {
         logger->log( "http: error %d", httpResponseCode );
