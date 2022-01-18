@@ -54,6 +54,7 @@ void VarovaniChmi::loadData()
             this->casStazeni = time(NULL);
         } else {
             logger->log( "JsonParse: error %s", de.c_str() );
+            delete doc;
         }
     } else {
         logger->log( "http: error %d", httpResponseCode );
