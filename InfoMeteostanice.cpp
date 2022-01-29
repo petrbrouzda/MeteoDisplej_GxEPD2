@@ -173,7 +173,7 @@ int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
     } else {
         sprintf( buffer2, " " );
     }
-    printOneBox( extdisplay, posX, posY, "Dnes", buffer, buffer2 );
+    printOneBox( extdisplay, posX, posY, (char*)"Dnes", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
@@ -184,7 +184,7 @@ int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
     } else {
         sprintf( buffer2, " " );
     }
-    printOneBox( extdisplay, posX, posY, "Noc", buffer, buffer2 );
+    printOneBox( extdisplay, posX, posY, (char*)"Noc", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
@@ -195,7 +195,7 @@ int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
     } else {
         sprintf( buffer2, " " );
     }
-    printOneBox( extdisplay, posX, posY, "Včera", buffer, buffer2 );
+    printOneBox( extdisplay, posX, posY, (char*)"Včera", buffer, buffer2 );
 
     // ---------------- 
     posX += BOX_WIDTH;
@@ -206,7 +206,7 @@ int InfoMeteostanice::drawData( ExtDisplay * extdisplay, bool firstRun )
     } else {
         sprintf( buffer2, " " );
     }
-    printOneBox( extdisplay, posX, posY, "Týden", buffer, buffer2 );
+    printOneBox( extdisplay, posX, posY, (char*)"Týden", buffer, buffer2 );
 
     return 0;
 }
