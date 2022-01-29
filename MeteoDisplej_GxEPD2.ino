@@ -262,21 +262,19 @@ void doDraw()
       logger->log( "YR.NO nema data" );
     }
 
-    int poziceInfolisty = extdisplay.posY + 1;
+    int poziceInfolisty = extdisplay.posY + 4;
 
     #ifdef ZOBRAZ_DATA_Z_METEOSTANICE
       if( infoMeteostanice->hasData() ) {
         if( extdisplay.posY < extdisplay.display->height() - infoMeteostanice->vyskaBloku() ) {
           infoMeteostanice->drawData( &extdisplay, firstRun );
+          poziceInfolisty = extdisplay.display->height() - infoMeteostanice->vyskaBloku();
         } else {
           logger->log( "Meteostanice ma data, ale nevejdou se na displej" );  
         }
       } else {
         logger->log( "Meteostanice nema data" );
       } 
-      poziceInfolisty = extdisplay.display->height() - infoMeteostanice->vyskaBloku();
-    #elif 
-      poziceInfolisty = extdisplay.display->height();
     #endif
 
     extdisplay.setPos( 5, poziceInfolisty );
