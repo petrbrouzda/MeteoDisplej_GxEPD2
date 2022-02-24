@@ -23,9 +23,12 @@ PredpovedAlojz::PredpovedAlojz( raLogger * logger, raConfig * config,  DataAplik
 void PredpovedAlojz::loadData()
 {
     char url[255];
-    sprintf( url, "%s%s",
-        this->config->getString( "url_alojz", "https://alojz.cz/api/v1/solution?url_id=/" ),
-        this->dataAplikace->misto_alojz );
+    sprintf( url, "%s%s&lat=%f&lon=%f&alt=%d",
+        this->config->getString( "url_alojz", "http://lovecka.info/YrNoProvider1/alojz/alojz?alojzId=" ),
+        this->dataAplikace->misto_alojz,
+        this->dataAplikace->pozice_lat, 
+        this->dataAplikace->pozice_lon, 
+        this->dataAplikace->pozice_altitude );
 
     logger->log( "Stahuji: %s", url );
 
