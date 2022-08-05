@@ -94,7 +94,7 @@ boolean VarovaniChmi::hasData()
 }
 
 
-#define VAROVANI_NEMAM_IKONU "a"
+#define VAROVANI_NEMAM_IKONU "]"
 
 char * getIcon( const char * icon )
 {
